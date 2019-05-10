@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">mvvm</string>
+
+    <string name="empty_text">No movies in the list</string>
+</resources>
