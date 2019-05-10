@@ -27,10 +27,7 @@ class MovieListFragment: Fragment(){
     internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var moviesListViewModel: MovieListViewModel
-
-    /*
-    * I am using DataBinding
-    * * */
+    
     private lateinit var binding: FragmentMovieListBinding
 
 
