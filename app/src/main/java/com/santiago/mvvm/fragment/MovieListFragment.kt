@@ -29,7 +29,7 @@ class MovieListFragment: Fragment(){
     lateinit var moviesListViewModel: MovieListViewModel
 
     /*
-    * I am using DataBinding
+    * DataBinding es esencial
     * * */
     private lateinit var binding: FragmentMovieListBinding
 
