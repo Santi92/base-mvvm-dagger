@@ -1,4 +1,4 @@
-package com.santiago.mvvm.viewmodel
+package com.santiago.mvvm.ui.movieList
 
 
 import androidx.lifecycle.MutableLiveData

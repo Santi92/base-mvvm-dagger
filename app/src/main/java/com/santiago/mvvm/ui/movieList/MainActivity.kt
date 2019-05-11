@@ -1,4 +1,4 @@
-package com.santiago.mvvm.activity
+package com.santiago.mvvm.ui.movieList
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,7 +6,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.santiago.mvvm.R
 import com.santiago.mvvm.databinding.ActivityMainBinding
-import com.santiago.mvvm.fragment.MovieListFragment
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -38,9 +37,9 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     private fun initialiseView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        getSupportFragmentManager().beginTransaction()
+        supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_nav_host, MovieListFragment())
-            .commit();
+            .commit()
     }
 
     fun updateBackground(url: String?) {

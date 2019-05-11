@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.santiago.mvvm.binding
+package com.santiago.mvvm.ui.binding
 
 import androidx.databinding.BindingAdapter
 import android.view.View

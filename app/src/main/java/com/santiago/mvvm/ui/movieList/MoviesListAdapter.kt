@@ -1,4 +1,4 @@
-package com.santiago.mvvm.adapter
+package com.santiago.mvvm.ui.movieList
 
 import android.app.Activity
 
@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso
 class MoviesListAdapter(private val activity: Activity) : RecyclerView.Adapter<MoviesListAdapter.CustomViewHolder>() {
     private var movies: MutableList<MovieEntity> = mutableListOf()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesListAdapter.CustomViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val itemBinding = ListItemMovieBinding.inflate(layoutInflater, parent, false)
         return CustomViewHolder(itemBinding)
@@ -35,7 +35,7 @@ class MoviesListAdapter(private val activity: Activity) : RecyclerView.Adapter<M
         return movies[position]
     }
 
-    override fun onBindViewHolder(holder: MoviesListAdapter.CustomViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         holder.bindTo(getItem(position))
     }
 

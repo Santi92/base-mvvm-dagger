@@ -1,6 +1,6 @@
 package com.santiago.mvvm.di.module
 
-import com.santiago.mvvm.fragment.MovieListFragment
+import com.santiago.mvvm.ui.movieList.MovieListFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

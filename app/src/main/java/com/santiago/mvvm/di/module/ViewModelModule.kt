@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.santiago.mvvm.factory.ViewModelFactory
 
-import com.santiago.mvvm.viewmodel.MovieListViewModel
+import com.santiago.mvvm.ui.movieList.MovieListViewModel
 
 import dagger.Binds
 import dagger.Module

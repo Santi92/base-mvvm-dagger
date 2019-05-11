@@ -1,4 +1,4 @@
-package com.santiago.mvvm.fragment
+package com.santiago.mvvm.ui.movieList
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,13 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.santiago.mvvm.R
-import com.santiago.mvvm.activity.MainActivity
-import com.santiago.mvvm.adapter.MoviesListAdapter
 import com.santiago.mvvm.custom.PagerSnapHelper
 import com.santiago.mvvm.custom.RecyclerSnapItemListener
 import com.santiago.mvvm.data.local.entity.MovieEntity
 import com.santiago.mvvm.databinding.FragmentMovieListBinding
-import com.santiago.mvvm.viewmodel.MovieListViewModel
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -26,7 +23,7 @@ class MovieListFragment: Fragment(){
     @Inject
     internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var moviesListViewModel: MovieListViewModel
+    private lateinit var moviesListViewModel: MovieListViewModel
     private lateinit var binding: FragmentMovieListBinding
 
 
