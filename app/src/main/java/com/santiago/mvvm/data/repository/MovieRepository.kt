@@ -1,18 +1,24 @@
 package com.santiago.mvvm.data.repository
 
 
+import androidx.lifecycle.LiveData
+import com.santiago.mvvm.AppExecutors
 import com.santiago.mvvm.data.NetworkBoundResource
 import com.santiago.mvvm.data.Resource
 import com.santiago.mvvm.data.local.dao.MovieDao
 import com.santiago.mvvm.data.local.entity.MovieEntity
+import com.santiago.mvvm.data.remote.ApiResponse
 import com.santiago.mvvm.data.remote.api.MovieApiService
 import com.santiago.mvvm.data.remote.model.MovieApiResponse
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MovieRepository(
+class MovieRepository @Inject constructor(
+    private val appExecutors: AppExecutors,
     private val movieDao: MovieDao,
     private val movieApiService: MovieApiService
 ) {
@@ -35,33 +41,27 @@ class MovieRepository(
      * this data.
      *
      * */
-    fun loadMoviesByType(): Observable<Resource<List<MovieEntity>>> {
-        return object : NetworkBoundResource<List<MovieEntity>, MovieApiResponse>() {
-
+    fun loadMoviesByType(): LiveData<Resource<List<MovieEntity>>> {
+        return object : NetworkBoundResource<List<MovieEntity>, MovieApiResponse>(appExecutors) {
             override fun saveCallResult(item: MovieApiResponse) {
                 movieDao.insertMovies(item.results)
             }
 
-            override fun shouldFetch(): Boolean {
-                return true
+            override fun shouldFetch(data: List<MovieEntity>?)= data == null
+
+
+            override fun loadFromDb(): LiveData<List<MovieEntity>> {
+                 return movieDao.getMoviesByPage()
             }
 
-            override fun loadFromDb(): Flowable<List<MovieEntity>> {
-                val movieEntities = movieDao.getMoviesByPage()
-                return if (movieEntities == null || movieEntities.isEmpty()) {
-                    Flowable.empty()
-                } else Flowable.just(movieEntities)
-            }
+            override fun createCall()= movieApiService.fetchMoviesByType()
 
-            override fun createCall(): Observable<Resource<MovieApiResponse>> {
-                return movieApiService.fetchMoviesByType()
-                    .flatMap { movieApiResponse ->
-                        Observable.just(
-                            if (movieApiResponse == null) Resource.error("", MovieApiResponse(1, emptyList(), 0, 1))
-                            else Resource.success(movieApiResponse)
-                        )
-                    }
-            }
-        }.getAsObservable()
+
+        }.asLiveData()
     }
+
+
+
+
+
 }

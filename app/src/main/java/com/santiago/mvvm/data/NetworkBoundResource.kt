@@ -1,76 +1,102 @@
 package com.santiago.mvvm.data
 
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.santiago.mvvm.AppExecutors
+import com.santiago.mvvm.data.remote.ApiEmptyResponse
+import com.santiago.mvvm.data.remote.ApiErrorResponse
+import com.santiago.mvvm.data.remote.ApiResponse
+import com.santiago.mvvm.data.remote.ApiSuccessResponse
 
 
-abstract class NetworkBoundResource<ResultType, RequestType> @MainThread
-protected constructor() {
+abstract class NetworkBoundResource<ResultType, RequestType>
+@MainThread constructor(private val appExecutors: AppExecutors) {
 
-    private val asObservable: Observable<Resource<ResultType>>
+    private val result = MediatorLiveData<Resource<ResultType>>()
 
     init {
-        val source: Observable<Resource<ResultType>>
-        if (shouldFetch()) {
-
-            source = createCall()
-                .subscribeOn(Schedulers.io())
-                .doOnNext {
-                    saveCallResult(processResponse(it)!!) }
-
-                .flatMap {
-                    loadFromDb().toObservable()
-                        .map { Resource.success(it) } }
-
-                .doOnError { onFetchFailed() }
-
-                .onErrorResumeNext { t : Throwable ->
-                    loadFromDb().toObservable().map {
-                        Resource.error(t.message!!, it) }
+        result.value = Resource.loading(null)
+        @Suppress("LeakingThis")
+        val dbSource = loadFromDb()
+        result.addSource(dbSource) { data ->
+            result.removeSource(dbSource)
+            if (shouldFetch(data)) {
+                fetchFromNetwork(dbSource)
+            } else {
+                result.addSource(dbSource) { newData ->
+                    setValue(Resource.success(newData))
                 }
-
-                .observeOn(AndroidSchedulers.mainThread())
-
-        } else {
-            source = loadFromDb()
-                .toObservable()
-                .map { Resource.success(it) }
+            }
         }
-
-        asObservable = Observable.concat(
-            loadFromDb()
-                .toObservable()
-                .map { Resource.loading(it) }
-                .take(1),
-            source
-        )
     }
 
-    fun getAsObservable(): Observable<Resource<ResultType>> {
-        return asObservable
+    @MainThread
+    private fun setValue(newValue: Resource<ResultType>) {
+        if (result.value != newValue) {
+            result.value = newValue
+        }
     }
 
-    private fun onFetchFailed() {}
+    private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
+        val apiResponse = createCall()
+        // we re-attach dbSource as a new source, it will dispatch its latest value quickly
+        result.addSource(dbSource) { newData ->
+            setValue(Resource.loading(newData))
+        }
+        result.addSource(apiResponse) { response ->
+            result.removeSource(apiResponse)
+            result.removeSource(dbSource)
+            when (response) {
+                is ApiSuccessResponse -> {
+                    appExecutors.diskIO().execute {
+                        saveCallResult(processResponse(response))
+                        appExecutors.mainThread().execute {
+                            // we specially request a new live data,
+                            // otherwise we will get immediately last cached value,
+                            // which may not be updated with latest results received from network.
+                            result.addSource(loadFromDb()) { newData ->
+                                setValue(Resource.success(newData))
+                            }
+                        }
+                    }
+                }
+                is ApiEmptyResponse -> {
+                    appExecutors.mainThread().execute {
+                        // reload from disk whatever we had
+                        result.addSource(loadFromDb()) { newData ->
+                            setValue(Resource.success(newData))
+                        }
+                    }
+                }
+                is ApiErrorResponse -> {
+                    onFetchFailed()
+                    result.addSource(dbSource) { newData ->
+                        setValue(Resource.error(response.errorMessage, newData))
+                    }
+                }
+            }
+        }
+    }
+
+    protected open fun onFetchFailed() {}
+
+    fun asLiveData() = result as LiveData<Resource<ResultType>>
 
     @WorkerThread
-    protected fun processResponse(response: Resource<RequestType>): RequestType? {
-        return response.data
-    }
+    protected open fun processResponse(response: ApiSuccessResponse<RequestType>) = response.body
 
     @WorkerThread
     protected abstract fun saveCallResult(item: RequestType)
 
     @MainThread
-    protected abstract fun shouldFetch(): Boolean
+    protected abstract fun shouldFetch(data: ResultType?): Boolean
 
     @MainThread
-    protected abstract fun loadFromDb(): Flowable<ResultType>
+    protected abstract fun loadFromDb(): LiveData<ResultType>
 
     @MainThread
-    protected abstract fun createCall(): Observable<Resource<RequestType>>
+    protected abstract fun createCall(): LiveData<ApiResponse<RequestType>>
 }

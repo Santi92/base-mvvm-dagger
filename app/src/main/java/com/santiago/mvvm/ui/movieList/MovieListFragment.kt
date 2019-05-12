@@ -17,6 +17,7 @@ import com.santiago.mvvm.data.local.entity.MovieEntity
 import com.santiago.mvvm.databinding.FragmentMovieListBinding
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
+import kotlin.concurrent.timerTask
 
 class MovieListFragment: Fragment(){
 
@@ -65,7 +66,8 @@ class MovieListFragment: Fragment(){
 
     private fun initialiseViewModel() {
         moviesListViewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieListViewModel::class.java)
-        moviesListViewModel.getMoviesLiveData().observe(this, Observer { resource ->
+        moviesListViewModel.reload(true)
+        moviesListViewModel.listMovie.observe(this, Observer { resource ->
             if (resource!!.isLoading) {
                 displayLoader()
 
@@ -75,8 +77,6 @@ class MovieListFragment: Fragment(){
             } else
                 handleErrorResponse()
         })
-        /* Fetch movies list  */
-        moviesListViewModel.loadMoreMovies()
     }
 
 

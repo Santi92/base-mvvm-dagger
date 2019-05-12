@@ -1,6 +1,7 @@
 package com.santiago.mvvm.data.local.dao
 
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -18,5 +19,5 @@ interface MovieDao {
 
     /* Method to fetch the movies stored locally */
     @Query("SELECT * FROM MovieEntity")
-    fun getMoviesByPage(): List<MovieEntity>
+    fun getMoviesByPage(): LiveData<List<MovieEntity>>
 }
