@@ -5,6 +5,7 @@ import android.app.Activity
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.santiago.mvvm.R
 import com.santiago.mvvm.data.local.entity.MovieEntity
@@ -12,7 +13,9 @@ import com.santiago.mvvm.databinding.ListItemMovieBinding
 import com.squareup.picasso.Picasso
 
 
-class MoviesListAdapter(private val activity: Activity) : RecyclerView.Adapter<MoviesListAdapter.CustomViewHolder>() {
+class MoviesListAdapter(private val activity: Activity,    private val movieClickCallback: ((MovieEntity) -> Unit)?)
+    : RecyclerView.Adapter<MoviesListAdapter.CustomViewHolder>() {
+
     private var movies: MutableList<MovieEntity> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
@@ -57,6 +60,10 @@ class MoviesListAdapter(private val activity: Activity) : RecyclerView.Adapter<M
             Picasso.get().load(movie.getFormattedPosterPath())
                 .placeholder(R.drawable.ic_placeholder)
                 .into(binding.image)
+
+            binding.image.setOnClickListener {
+                movieClickCallback?.invoke(movie)
+            }
         }
     }
 }

@@ -27,22 +27,19 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
         initialiseView()
     }
 
-    override fun supportFragmentInjector(): DispatchingAndroidInjector<Fragment> {
-        return dispatchingAndroidInjector
-    }
-
     /*
    * Initialising the View using Data Binding
    * */
     private fun initialiseView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_nav_host, MovieListFragment())
-            .commit()
     }
 
     fun updateBackground(url: String?) {
         binding.overlayLayout.updateCurrentBackground(url)
+    }
+
+    override fun supportFragmentInjector(): DispatchingAndroidInjector<Fragment> {
+        return dispatchingAndroidInjector
     }
 }

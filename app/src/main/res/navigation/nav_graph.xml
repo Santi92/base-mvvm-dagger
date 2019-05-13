@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/nav_graph"
+            app:startDestination="@id/movieListFragmentNav">
+
+    <fragment android:id="@+id/movieListFragmentNav"
+              android:name="com.santiago.mvvm.ui.movieList.MovieListFragment"
+              android:label="MovieListFragment">
+        <action android:id="@+id/showMovieDetail"
+                app:destination="@id/movieDetailFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/movieDetailFragment"
+              android:name="com.santiago.mvvm.ui.detail.MovieDetailFragment"
+              android:label="MovieDetailFragment"/>
+</navigation>

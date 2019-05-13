@@ -9,15 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.santiago.mvvm.R
 import com.santiago.mvvm.custom.PagerSnapHelper
 import com.santiago.mvvm.custom.RecyclerSnapItemListener
 import com.santiago.mvvm.data.local.entity.MovieEntity
 import com.santiago.mvvm.databinding.FragmentMovieListBinding
+
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
-import kotlin.concurrent.timerTask
 
 class MovieListFragment: Fragment(){
 
@@ -32,9 +33,8 @@ class MovieListFragment: Fragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         AndroidSupportInjection.inject(this)
-        initialiseViewModel()
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,11 +44,14 @@ class MovieListFragment: Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initialiseViewModel()
         initialiseView()
     }
 
     private fun initialiseView() {
-        moviesListAdapter = MoviesListAdapter(requireActivity())
+        moviesListAdapter = MoviesListAdapter(requireActivity()){
+            NavHostFragment.findNavController(this).navigate(MovieListFragmentDirections.showMovieDetail())
+        }
         binding.moviesList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.moviesList.adapter = moviesListAdapter
 
@@ -102,4 +105,5 @@ class MovieListFragment: Fragment(){
         binding.moviesList.visibility = View.GONE
         binding.emptyLayout.emptyContainer.visibility = View.VISIBLE
     }
+
 }
