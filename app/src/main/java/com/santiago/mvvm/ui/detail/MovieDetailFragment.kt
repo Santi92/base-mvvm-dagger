@@ -13,6 +13,7 @@ import com.santiago.mvvm.databinding.FragmentMovieDetailBinding
 
 class MovieDetailFragment : Fragment() {
 
+
     private lateinit var binding: FragmentMovieDetailBinding
 
     companion object {
@@ -32,7 +33,8 @@ class MovieDetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MovieDetailViewModel::class.java)
-        // TODO: Use the ViewModel
+        val params = MovieDetailFragmentArgs.fromBundle(arguments!!)
+        binding.txtNameMovie.text = params.movieId.toString()
     }
 
 }

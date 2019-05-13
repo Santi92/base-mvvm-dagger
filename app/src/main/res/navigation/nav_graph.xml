@@ -13,5 +13,7 @@
 
     <fragment android:id="@+id/movieDetailFragment"
               android:name="com.santiago.mvvm.ui.detail.MovieDetailFragment"
-              android:label="MovieDetailFragment"/>
+              android:label="MovieDetailFragment">
+        <argument android:name="movieId" app:argType="long"/>
+    </fragment>
 </navigation>

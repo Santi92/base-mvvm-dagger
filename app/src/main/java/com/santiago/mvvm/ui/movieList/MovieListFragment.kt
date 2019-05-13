@@ -50,7 +50,9 @@ class MovieListFragment: Fragment(){
 
     private fun initialiseView() {
         moviesListAdapter = MoviesListAdapter(requireActivity()){
-            NavHostFragment.findNavController(this).navigate(MovieListFragmentDirections.showMovieDetail())
+            NavHostFragment
+                .findNavController(this)
+                .navigate(MovieListFragmentDirections.showMovieDetail(it.id))
         }
         binding.moviesList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.moviesList.adapter = moviesListAdapter
