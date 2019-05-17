@@ -15,6 +15,7 @@
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/margin_large"
+
                 android:layout_marginRight="@dimen/margin_large"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="6dp"
@@ -25,7 +26,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+
+            />
 
 
         </com.santiago.mvvm.custom.AspectRatioCardView>

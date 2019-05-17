@@ -3,6 +3,7 @@ package com.santiago.mvvm.di.module
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.santiago.mvvm.factory.ViewModelFactory
+import com.santiago.mvvm.ui.detail.MovieDetailViewModel
 
 import com.santiago.mvvm.ui.movieList.MovieListViewModel
 
@@ -26,6 +27,12 @@ internal abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MovieListViewModel::class)
     protected abstract fun movieListViewModel(moviesListViewModel: MovieListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MovieDetailViewModel::class)
+    protected abstract fun movieDetailViewModel(movieDetailViewModel: MovieDetailViewModel): ViewModel
+
 
     @Binds
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

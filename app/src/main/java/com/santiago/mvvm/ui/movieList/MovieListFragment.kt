@@ -11,11 +11,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionInflater
 import com.santiago.mvvm.R
 import com.santiago.mvvm.custom.PagerSnapHelper
 import com.santiago.mvvm.custom.RecyclerSnapItemListener
 import com.santiago.mvvm.data.local.entity.MovieEntity
 import com.santiago.mvvm.databinding.FragmentMovieListBinding
+import com.santiago.mvvm.utils.FragmentNavigatorExtras
+import com.santiago.mvvm.utils.autoCleared
 
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -29,16 +32,16 @@ class MovieListFragment: Fragment(){
     private lateinit var binding: FragmentMovieListBinding
 
 
-    private lateinit var moviesListAdapter: MoviesListAdapter
+    private  var moviesListAdapter  by autoCleared<MoviesListAdapter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidSupportInjection.inject(this)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list, container, false)
+        sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
         return binding.root
     }
 
@@ -49,10 +52,13 @@ class MovieListFragment: Fragment(){
     }
 
     private fun initialiseView() {
-        moviesListAdapter = MoviesListAdapter(requireActivity()){
+        moviesListAdapter = MoviesListAdapter(requireActivity()){ movie, image ->
+            val extras = FragmentNavigatorExtras(
+                image to movie.id.toString()
+            )
             NavHostFragment
                 .findNavController(this)
-                .navigate(MovieListFragmentDirections.showMovieDetail(it.id))
+                .navigate(MovieListFragmentDirections.showMovieDetail(movie.id),extras)
         }
         binding.moviesList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.moviesList.adapter = moviesListAdapter
@@ -66,8 +72,13 @@ class MovieListFragment: Fragment(){
             }
         )
         startSnapHelper.attachToRecyclerView(binding.moviesList)
+        postponeEnterTransition()
+        binding.moviesList.getViewTreeObserver()
+            .addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
     }
-
 
     private fun initialiseViewModel() {
         moviesListViewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieListViewModel::class.java)

@@ -23,24 +23,6 @@ class MovieRepository @Inject constructor(
     private val movieApiService: MovieApiService
 ) {
 
-
-    /*
-     * We are using this method to fetch the movies list
-     * NetworkBoundResource is part of the Android architecture
-     * components. You will notice that this is a modified version of
-     * that class. That class is based on LiveData but here we are
-     * using Observable from RxJava.
-     *
-     * There are three methods called:
-     * a. fetch data from server
-     * b. fetch data from local
-     * c. save data from api in local
-     *
-     * So basically we fetch data from server, store it locally
-     * and then fetch data from local and update the UI with
-     * this data.
-     *
-     * */
     fun loadMoviesByType(): LiveData<Resource<List<MovieEntity>>> {
         return object : NetworkBoundResource<List<MovieEntity>, MovieApiResponse>(appExecutors) {
             override fun saveCallResult(item: MovieApiResponse) {
@@ -60,8 +42,29 @@ class MovieRepository @Inject constructor(
         }.asLiveData()
     }
 
+    fun fetchMovieDetails(movieId: Long): LiveData<Resource<MovieEntity>> {
+
+        return object : NetworkBoundResource<MovieEntity, MovieEntity>(appExecutors) {
+            override fun saveCallResult(item: MovieEntity) {
+                val movieEntity: MovieEntity? = movieDao.getMovieById(movieId).value
+                if(null == movieEntity){
+                    movieDao.insertMovie(item)
+                }
+            }
+
+            override fun shouldFetch(data: MovieEntity?)= data == null
+
+            override fun loadFromDb(): LiveData<MovieEntity> {
+                return movieDao.getMovieById(movieId)
+            }
+
+            override fun createCall(): LiveData<ApiResponse<MovieEntity>> {
+                val id = movieId.toString()
+               return movieApiService.fetchMovieDetail(id)
+            }
 
 
-
+        }.asLiveData()
+    }
 
 }

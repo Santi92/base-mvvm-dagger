@@ -17,7 +17,16 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovies(movies: List<MovieEntity>): LongArray
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertMovie(movie: MovieEntity): Long
+
     /* Method to fetch the movies stored locally */
     @Query("SELECT * FROM MovieEntity")
     fun getMoviesByPage(): LiveData<List<MovieEntity>>
+
+    @Query("SELECT * FROM `MovieEntity` where id = :id")
+    fun getMovieById(id: Long?): LiveData<MovieEntity>
+
+
+
 }

@@ -1,6 +1,7 @@
 package com.santiago.mvvm.custom
 
 import android.content.Context
+import android.graphics.Color
 
 import android.util.AttributeSet
 import com.google.android.material.card.MaterialCardView
@@ -21,5 +22,7 @@ class AspectRatioCardView @JvmOverloads constructor(
         val lp = layoutParams
         lp.height = ratioHeight
         layoutParams = lp
+        setCardBackgroundColor(Color.TRANSPARENT)
+        cardElevation = 0F
     }
 }

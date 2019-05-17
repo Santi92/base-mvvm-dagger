@@ -1,5 +1,6 @@
 package com.santiago.mvvm.di.module
 
+import com.santiago.mvvm.ui.detail.MovieDetailFragment
 import com.santiago.mvvm.ui.movieList.MovieListFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -14,4 +15,8 @@ abstract class FragmentBuildersModule {
         */
     @ContributesAndroidInjector
     abstract fun contributeMovieListFragment(): MovieListFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeMovieDetailFragment(): MovieDetailFragment
+
 }

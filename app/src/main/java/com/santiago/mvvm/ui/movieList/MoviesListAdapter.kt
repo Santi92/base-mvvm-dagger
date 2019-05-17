@@ -1,10 +1,12 @@
 package com.santiago.mvvm.ui.movieList
 
 import android.app.Activity
+import android.os.Build
 
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.santiago.mvvm.R
@@ -13,7 +15,7 @@ import com.santiago.mvvm.databinding.ListItemMovieBinding
 import com.squareup.picasso.Picasso
 
 
-class MoviesListAdapter(private val activity: Activity,    private val movieClickCallback: ((MovieEntity) -> Unit)?)
+class MoviesListAdapter(private val activity: Activity,    private val movieClickCallback: ((MovieEntity,ImageView) -> Unit)?)
     : RecyclerView.Adapter<MoviesListAdapter.CustomViewHolder>() {
 
     private var movies: MutableList<MovieEntity> = mutableListOf()
@@ -61,8 +63,12 @@ class MoviesListAdapter(private val activity: Activity,    private val movieClic
                 .placeholder(R.drawable.ic_placeholder)
                 .into(binding.image)
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                binding.image.transitionName = movie.id.toString()
+            }
+
             binding.image.setOnClickListener {
-                movieClickCallback?.invoke(movie)
+                movieClickCallback?.invoke(movie,binding.image)
             }
         }
     }
