@@ -25,11 +25,14 @@ import javax.inject.Inject
 
 class MovieListFragment: Fragment(){
 
+    companion object {
+        var binding: FragmentMovieListBinding? =  null
+    }
     @Inject
     internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var moviesListViewModel: MovieListViewModel
-    private lateinit var binding: FragmentMovieListBinding
+
 
 
     private  var moviesListAdapter  by autoCleared<MoviesListAdapter>()
@@ -40,18 +43,29 @@ class MovieListFragment: Fragment(){
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list, container, false)
-        sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
-        return binding.root
+        if (binding == null){
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list, container, false)
+            sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
+        }
+
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initialiseViewModel()
-        initialiseView()
+        if ( binding!!.moviesList.adapter == null){
+            initialiseView()
+            initialiseViewModel()
+        }
+    }
+
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
     }
 
     private fun initialiseView() {
+
         moviesListAdapter = MoviesListAdapter(requireActivity()){ movie, image ->
             val extras = FragmentNavigatorExtras(
                 image to movie.id.toString()
@@ -60,25 +74,31 @@ class MovieListFragment: Fragment(){
                 .findNavController(this)
                 .navigate(MovieListFragmentDirections.showMovieDetail(movie.id),extras)
         }
-        binding.moviesList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.moviesList.adapter = moviesListAdapter
+
+        binding!!.moviesList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding!!.moviesList.adapter = moviesListAdapter
 
         val startSnapHelper = PagerSnapHelper(
             object : RecyclerSnapItemListener {
+
                 override fun onItemSnap(position: Int) {
                     val movie = moviesListAdapter.getItem(position)
                     (requireActivity() as MainActivity).updateBackground(movie.getFormattedPosterPath())
                 }
             }
         )
-        startSnapHelper.attachToRecyclerView(binding.moviesList)
+
+        startSnapHelper.attachToRecyclerView(binding!!.moviesList)
         postponeEnterTransition()
-        binding.moviesList.getViewTreeObserver()
+        binding!!.moviesList.getViewTreeObserver()
             .addOnPreDrawListener {
                 startPostponedEnterTransition()
                 true
             }
+        startPostponedEnterTransition()
     }
+
+
 
     private fun initialiseViewModel() {
         moviesListViewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieListViewModel::class.java)
@@ -97,26 +117,26 @@ class MovieListFragment: Fragment(){
 
 
     private fun displayLoader() {
-        binding.moviesList.visibility = View.GONE
-        binding.loaderLayout.rootView.visibility = View.VISIBLE
+        binding!!.moviesList.visibility = View.GONE
+        binding!!.loaderLayout.rootView.visibility = View.VISIBLE
     }
 
     private fun hideLoader() {
-        binding.moviesList.visibility = View.VISIBLE
-        binding.loaderLayout.rootView.visibility = View.GONE
+        binding!!.moviesList.visibility = View.VISIBLE
+        binding!!.loaderLayout.rootView.visibility = View.GONE
     }
 
     private fun updateMoviesList(movies: List<MovieEntity>) {
         hideLoader()
-        binding.emptyLayout.emptyContainer.visibility = View.GONE
-        binding.moviesList.visibility = View.VISIBLE
+        binding!!.emptyLayout.emptyContainer.visibility = View.GONE
+        binding!!.moviesList.visibility = View.VISIBLE
         moviesListAdapter.setItems(movies)
     }
 
     private fun handleErrorResponse() {
         hideLoader()
-        binding.moviesList.visibility = View.GONE
-        binding.emptyLayout.emptyContainer.visibility = View.VISIBLE
+        binding!!.moviesList.visibility = View.GONE
+        binding!!.emptyLayout.emptyContainer.visibility = View.VISIBLE
     }
 
 }

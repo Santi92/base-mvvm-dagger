@@ -6,9 +6,11 @@
 
     <fragment android:id="@+id/movieListFragmentNav"
               android:name="com.santiago.mvvm.ui.movieList.MovieListFragment"
-              android:label="MovieListFragment">
+
+              android:label="MovieListFragment" app:popUpToInclusive="false">
         <action android:id="@+id/showMovieDetail"
-                app:destination="@id/movieDetailFragment"/>
+                app:destination="@id/movieDetailFragment"
+                app:popUpToInclusive="false"/>
     </fragment>
 
     <fragment android:id="@+id/movieDetailFragment"

@@ -23,8 +23,6 @@ import kotlinx.android.synthetic.main.fragment_movie_detail.*
 import javax.inject.Inject
 
 
-
-
 class MovieDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieDetailBinding
