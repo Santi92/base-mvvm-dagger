@@ -25,11 +25,12 @@ android {
         }
     }
 
-    /* I use Data Binding and Java8 in all my projects */
+
     dataBinding {
         enabled true
     }
 
+  /* I use Data Binding and Java8 in all my projects */
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
