@@ -10,9 +10,10 @@ import android.widget.ImageView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.santiago.mvvm.R
-import com.santiago.mvvm.data.local.entity.MovieEntity
+
 import com.santiago.mvvm.databinding.ListItemMovieBinding
 import com.squareup.picasso.Picasso
+import com.sundevs.core.data.local.entity.MovieEntity
 
 
 class MoviesListAdapter(private val activity: Activity,    private val movieClickCallback: ((MovieEntity,ImageView) -> Unit)?)

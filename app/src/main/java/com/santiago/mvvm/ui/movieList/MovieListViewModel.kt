@@ -5,12 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.santiago.mvvm.data.Resource
-import com.santiago.mvvm.data.local.dao.MovieDao
-import com.santiago.mvvm.data.local.entity.MovieEntity
-import com.santiago.mvvm.data.remote.api.MovieApiService
-import com.santiago.mvvm.data.repository.MovieRepository
-import com.santiago.mvvm.utils.AbsentLiveData
+
+import com.sundevs.core.data.Resource
+import com.sundevs.core.data.local.entity.MovieEntity
+import com.sundevs.core.data.repository.MovieRepository
 
 import javax.inject.Inject
 

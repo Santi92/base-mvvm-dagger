@@ -15,10 +15,11 @@ import androidx.transition.TransitionInflater
 import com.santiago.mvvm.R
 import com.santiago.mvvm.custom.PagerSnapHelper
 import com.santiago.mvvm.custom.RecyclerSnapItemListener
-import com.santiago.mvvm.data.local.entity.MovieEntity
+
 import com.santiago.mvvm.databinding.FragmentMovieListBinding
 import com.santiago.mvvm.utils.FragmentNavigatorExtras
 import com.santiago.mvvm.utils.autoCleared
+import com.sundevs.core.data.local.entity.MovieEntity
 
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -107,8 +108,8 @@ class MovieListFragment: Fragment(){
             if (resource!!.isLoading) {
                 displayLoader()
 
-            } else if (resource.data != null && !resource.data.isEmpty()) {
-                updateMoviesList(resource.data)
+            } else if (resource.data != null && !resource.data!!.isEmpty()) {
+                updateMoviesList(resource.data!!)
 
             } else
                 handleErrorResponse()

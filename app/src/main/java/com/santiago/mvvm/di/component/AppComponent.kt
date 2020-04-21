@@ -5,14 +5,16 @@ import android.app.Application
 import com.santiago.mvvm.AppController
 import com.santiago.mvvm.di.module.*
 import com.santiago.mvvm.di.module.ViewModelModule
+import com.sundevs.core.di.ApiModule
+import com.sundevs.core.di.CoreModule
+import com.sundevs.core.di.DbModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
 @Component(
     modules = [
-        ApiModule::class,
-        DbModule::class,
+        CoreModule::class,
         ViewModelModule::class,
         ActivityModule::class,
         FragmentBuildersModule::class,
