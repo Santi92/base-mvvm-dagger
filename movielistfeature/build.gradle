@@ -7,16 +7,12 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'kotlin-allopen'
 
-
 android {
     compileSdkVersion 28
 
     defaultConfig {
-
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -38,12 +34,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
 }
 
 dependencies {
     implementation project(path: ':core')
-    implementation project(path: ':movielistfeature')
     implementation project(path: ':detailmoviefeature')
 
 

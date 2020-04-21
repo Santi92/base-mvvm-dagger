@@ -1,4 +1,4 @@
-package com.santiago.mvvm.ui.detail
+package com.sundevs.detailmoviefeature
 
 import android.os.Build
 import androidx.lifecycle.ViewModelProviders
@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.transition.TransitionInflater
+import com.santiago.mvvm.ui.detail.MovieDetailViewModel
 
 
 import com.squareup.picasso.Picasso
@@ -66,7 +67,7 @@ class MovieDetailFragment : Fragment() {
                 binding.txtNameMovie.text = this.header
                 cardView.visibility = View.VISIBLE
                 Picasso.get().load(getFormattedPosterPath())
-                    //.placeholder(R.drawable.ic_placeholder)
+                    .placeholder(R.drawable.ic_placeholder)
                     .into(binding.image)
                 startPostponedEnterTransition()
                 handler.postDelayed(1000) {
