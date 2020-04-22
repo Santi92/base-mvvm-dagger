@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -36,11 +37,24 @@ class MovieDetailFragment : Fragment() {
     private lateinit var viewModel: MovieDetailViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_detail, container, false)
-        //sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
-       // val params = MovieDetailFragmentArgs.fromBundle(arguments!!)
+
+
+        arguments?.let {
+            Log.i("TAG", "Argument=$arguments")
+
+            var key = it.getString("movie_id")
+            Log.i("TAG", "movie_id=$key")
+
+            var id = it.getString("img_url")
+            Log.i("TAG", "img_url=$id")
+
+        }
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-         //   binding.image.transitionName = params.movieId.toString()
+            //binding.image.transitionName = params.movieId.toString()
         }
 
         return binding.root
@@ -55,7 +69,7 @@ class MovieDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieDetailViewModel::class.java)
         //val params = MovieDetailFragmentArgs.fromBundle(arguments!!)
-        postponeEnterTransition()
+        //postponeEnterTransition()
         //loadMovie(params.movieId)
     }
 

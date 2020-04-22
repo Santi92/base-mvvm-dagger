@@ -64,10 +64,6 @@ class MoviesListAdapter(private val activity: Activity,    private val movieClic
                 .placeholder(R.drawable.ic_placeholder)
                 .into(binding.image)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                binding.image.transitionName = movie.id.toString()
-            }
-
             binding.image.setOnClickListener {
                 movieClickCallback?.invoke(movie,binding.image)
             }

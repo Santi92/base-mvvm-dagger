@@ -48,7 +48,6 @@ class MovieListFragment: Fragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (binding == null){
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list, container, false)
-            sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(com.sundevs.core.R.transition.move)
         }
 
         return binding!!.root
@@ -70,13 +69,11 @@ class MovieListFragment: Fragment(){
     private fun initialiseView() {
 
         moviesListAdapter = MoviesListAdapter(requireActivity()){ movie, image ->
-            val extras = FragmentNavigatorExtras(
-                image to movie.id.toString()
-            )
+
 
             NavHostFragment
                 .findNavController(this)
-                .navigate(MovieListFragmentDirections.showMovieDetail(movie.id),extras)
+                .navigate(MovieListFragmentDirections.showMovieDetail(movie.id))
         }
 
         binding!!.moviesList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
