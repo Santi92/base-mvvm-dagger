@@ -14,8 +14,10 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/detailmoviefeature" />
-            <option value="$PROJECT_DIR$/movielistfeature" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/detailmoviefeature" />
+            <option value="$PROJECT_DIR$/feature/moduleone" />
+            <option value="$PROJECT_DIR$/feature/movielistfeature" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

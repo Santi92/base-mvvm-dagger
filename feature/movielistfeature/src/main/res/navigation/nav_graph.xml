@@ -17,7 +17,7 @@
     </fragment>
 
     <fragment android:id="@+id/movieDetailFragment"
-            android:name="com.sundevs.movielistfeature.BlankFragment"
+            android:name="com.sundevs.detailmoviefeature.MovieDetailFragment"
               android:label="MovieDetailFragment">
         <argument android:name="movieId" app:argType="long"/>
     </fragment>

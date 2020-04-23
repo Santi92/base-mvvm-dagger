@@ -13,6 +13,8 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
         classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.0-alpha05"
+        classpath "com.github.ben-manes:gradle-versions-plugin:0.28.0"
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -23,6 +25,41 @@ allprojects {
         google()
         jcenter()
         
+    }
+}
+
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty('android')) {
+            apply plugin: "com.github.ben-manes.versions"
+
+            android {
+
+                compileSdkVersion 28
+                defaultConfig {
+
+                    minSdkVersion 17
+                    targetSdkVersion 28
+                    versionCode 1
+                    versionName "1.0"
+
+                    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+                    consumerProguardFiles 'consumer-rules.pro'
+                }
+
+
+                dataBinding {
+                    enabled true
+                }
+
+                /* I use Data Binding and Java8 in all my projects */
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+
+            }
+        }
     }
 }
 

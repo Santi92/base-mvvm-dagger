@@ -44,8 +44,8 @@ class MovieDetailFragment : Fragment() {
         arguments?.let {
             Log.i("TAG", "Argument=$arguments")
 
-            var key = it.getString("movie_id")
-            Log.i("TAG", "movie_id=$key")
+            var valor = it.get("movieId")
+            Log.i("TAG", "movieId=$valor")
 
             var id = it.getString("img_url")
             Log.i("TAG", "img_url=$id")
